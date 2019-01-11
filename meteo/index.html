@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Document</title>
+		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css"
+		/>
+		<style>
+			body {
+				text-align: center;
+				background-color: black;
+				color: white;
+			}
+			header {
+				font-family: "Merriweather", serif;
+				font-size: 140%;
+			}
+			main * {
+				font-family: "Raleway", sans-serif;
+			}
+			button {
+				padding: 10px;
+				background-color: navy;
+				border: 2px solid blue;
+				color: white;
+			}
+			input {
+				padding: 10px;
+			}
+			i {
+				margin: 30px;
+				font-size: 350%;
+			}
+			#temperature {
+				font-size: 200%;
+			}
+		</style>
+	</head>
+	<body>
+		<header><h1>Application météo de oufs !</h1></header>
+		<main>
+			<form action="" id="weather-query">
+				<input type="text" id="ville" placeholder="Tapez une ville" /> <button>Charger !</button>
+			</form>
+			<div id="meteo">
+				<div id="temps"><i class="wi wi-day-rain"></i></div>
+				<div id="temperature">Aujourd'hui, il fait <span class="degres"></span> degrès à <span class="villeName"></span></div>
+			</div>
+		</main>
+
+		<script>
+			document.querySelector('#meteo').style.display = "none";
+			document.querySelector("#weather-query").addEventListener("submit", event => {
+				event.preventDefault();
+				if (!isNaN(document.querySelector("#ville").value)) {
+					document.querySelector("#ville").style.border = "2px solid red";
+				} else if (document.querySelector("#ville").value === "") {
+					document.querySelector("#ville").style.border = "2px solid red";
+				} else {
+					document.querySelector("#ville").style.border = "";
+
+					const request = new XMLHttpRequest();
+
+					request.open(
+						"GET",
+						`http://api.openweathermap.org/data/2.5/weather?q=${
+							document.querySelector("#ville").value
+						}&appid=8e602b9ea28ed4f9f8fc97a5f6d1105c&units=metric`
+					);
+
+					request.addEventListener("load", () => {
+						//    console.log(request.responseText);
+						let villeTemp = parseInt(JSON.parse(request.responseText).main.temp);
+						let villeName = JSON.parse(request.responseText).name;
+
+						document.querySelector(".degres").textContent = villeTemp;
+						document.querySelector(".villeName").textContent = villeName;
+
+						let villeWeather = JSON.parse(request.responseText).weather[0].main;
+						let icon = document.querySelector("i");
+						console.log(JSON.parse(request.responseText));
+
+						const weatherIcon = {
+							Rain: "wi wi-day-rain",
+							Clouds: "wi wi-day-cloudy",
+							Snow: "wi wi-day-snow",
+							Mist: "wi wi-day-fog",
+							Clear: "wi wi-day-sunny",
+							Drizzle: "wi wi-day-sleet"
+						};
+
+						icon.className = weatherIcon[villeWeather];
+						document.querySelector('#meteo').style.display = "initial";
+					});
+					request.send();
+				}
+			});
+		</script>
+	</body>
+</html>
