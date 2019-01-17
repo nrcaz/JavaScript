@@ -4,6 +4,6 @@ One of the first language i learned, i really like it, easy and fast to write sm
 
 Here is some of the first works i did when i started
 
-http://nicholas-rossette.epizy.com/JavaScript/calculator/
+https://nrcaz.github.io/JavaScript/calculator/
 
-http://nicholas-rossette.epizy.com/JavaScript/meteo/
+https://nrcaz.github.io/JavaScript/meteo/
